@@ -1,22 +1,22 @@
-# Local2MT: Method for Aligning Camera Local Coordinate System with Motion Capture (or GPS) Coordinate System
+# Local2MT: Method for Aligning Camera Local Coordinate System with Motion Track (or GPS) Coordinate System
 
-[Chinese](./README.md)
+[English](./README_en.md)
 
 ## 0x1 Preparation
 
 Ensure that the camera's intrinsic parameters and distortion coefficients have been correctly calibrated.
 
-Prepare a checkerboard with motion capture markers attached to it, as shown in the image.
+Prepare a checkerboard with Motion Track markers attached to it, as shown in the image.
 
 ![chess_board](./img/chess_board.png)
 
-The motion capture markers should be placed at the four corners of the checkerboard.
+The Motion Track markers should be placed at the four corners of the checkerboard.
 
-Then place the checkerboard in the scene, ensuring that all four motion capture markers can be detected by the motion capture system.
+Then place the checkerboard in the scene, ensuring that all four Motion Track markers can be detected by the Motion Track system.
 
-Record the positions of the four motion capture markers in the motion capture coordinate system (in the order of the checkerboard, top-left, top-right, bottom-left, bottom-right).
+Record the positions of the four Motion Track markers in the Motion Track coordinate system (in the order of the checkerboard, top-left, top-right, bottom-left, bottom-right).
 
-Carefully remove the motion capture markers, ensuring that the position of the checkerboard is not significantly altered, and then take a photo of the checkerboard with the camera.
+Carefully remove the Motion Track markers, ensuring that the position of the checkerboard is not significantly altered, and then take a photo of the checkerboard with the camera.
 
 ![place_example](./img/place_example.png)
 
@@ -24,7 +24,7 @@ You will get an image like this:
 
 ![camera12](./img/camera12.jpg)
 
-This photo will not be used to align the camera local coordinate system with the motion capture coordinate system but will be used to solve the camera's extrinsic parameters.
+This photo will not be used to align the camera local coordinate system with the Motion Track coordinate system but will be used to solve the camera's extrinsic parameters.
 
 ## 0x2 Solving Camera Extrinsic Parameters
 
@@ -36,11 +36,11 @@ The script will also output `camera.json` to the `./output` directory for use in
 
 ![extrinsics_visualization](./img/extrinsics_visualization.png)
 
-## 0x03 Solving the Affine Matrix from Camera Coordinate System to Motion Capture Coordinate System
+## 0x03 Solving the Affine Matrix from Camera Coordinate System to Motion Track Coordinate System
 
-This step uses the coordinates of the four captured motion capture markers and the coordinates of the checkerboard corners (defined manually) to obtain the transformation affine matrix between the two.
+This step uses the coordinates of the four captured Motion Track markers and the coordinates of the checkerboard corners (defined manually) to obtain the transformation affine matrix between the two.
 
-Modify the script `solve_Local2MT.py` to include the four points in the motion capture coordinate system (`motion_tracking_points`). Note that the coordinates displayed in the motion capture software are in xzy format and need to be adjusted to xyz format for input into the script, then run the script.
+Modify the script `solve_Local2MT.py` to include the four points in the Motion Track coordinate system (`motion_tracking_points`). Note that the coordinates displayed in the Motion Track software are in xzy format and need to be adjusted to xyz format for input into the script, then run the script.
 
 The script will output `affine_matrix.json` to the `./output` directory for use in subsequent test scripts.
 
@@ -48,7 +48,7 @@ The script will output `affine_matrix.json` to the `./output` directory for use 
 
 The test will take the 2D coordinates in the image, intersect them with the ground plane (using the camera's extrinsic parameters), and obtain the approximate position of the vehicle in the camera coordinate system (since the center of the vehicle is not perfectly on the ground but has some height, this position is not very accurate).
 
-Then, convert the 3D position in the camera coordinate system to the position in the motion capture coordinate system using the affine matrix.
+Then, convert the 3D position in the camera coordinate system to the position in the Motion Track coordinate system using the affine matrix.
 
 ![detect.png](./img/detect.png)
 
